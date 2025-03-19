@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Medical Inventory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/inventory.js" defer></script>
+    <script src="js/orders.js" defer></script>
+    <script src="js/suppliers.js" defer></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-clinic-medical logo-icon"></i>
+                <span class="logo-text">School Meds</span>
+            </div>
+            <div class="nav-title">Menu</div>
+            <ul class="nav-items">
+                <li class="nav-item"><a href="#" class="nav-link active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-tab="inventory"><i class="fas fa-pills"></i> <span>Inventory</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-tab="orders"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-tab="suppliers"><i class="fas fa-warehouse"></i> <span>Suppliers</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-tab="patients"><i class="fas fa-user-md"></i> <span>Patients</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-tab="reports"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            </ul>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h1 class="page-title">Medical Inventory Dashboard</h1>
+                
+                <!-- Inventory Overview -->
+                <div class="dashboard-cards">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-primary"><i class="fas fa-capsules"></i></div>
+                        <div class="metric-title">Total Medicines</div>
+                        <div class="metric-value">320</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-warning"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="metric-title">Low Stock Items</div>
+                        <div class="metric-value">15</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-danger"><i class="fas fa-calendar-times"></i></div>
+                        <div class="metric-title">Expiring Soon</div>
+                        <div class="metric-value">8</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-success"><i class="fas fa-cart-plus"></i></div>
+                        <div class="metric-title">Orders This Month</div>
+                        <div class="metric-value">12</div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="dashboard-cards">
+                    <div class="card chart-container">
+                        <h2 class="chart-title">Medicine Categories</h2>
+                        <canvas id="medicineCategoryChart"></canvas>
+                    </div>
+                    <div class="card chart-container">
+                        <h2 class="chart-title">Monthly Inventory Values</h2>
+                        <canvas id="monthlyInventoryChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Low Stock Alert -->
+                <div class="card">
+                    <h2 class="chart-title">Low Stock Alerts</h2>
+                    <div id="lowStockTable"></div>
+                </div>
+                
+                <!-- Recent Orders -->
+                <div class="card">
+                    <h2 class="chart-title">Recent Orders</h2>
+                    <div id="recentOrdersTable"></div>
+                </div>
+            </div>
+            
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <h1 class="page-title">Medical Inventory</h1>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="inventorySearch" placeholder="Search inventory...">
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-inventory-tab="all">All Items <span class="pills-counter">320</span></button>
+                        <button class="tab-btn" data-inventory-tab="low-stock">Low Stock <span class="pills-counter">15</span></button>
+                        <button class="tab-btn" data-inventory-tab="expiring-soon">Expiring Soon <span class="pills-counter">8</span></button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                            <button class="btn btn-primary" id="addItemBtn"><i class="fas fa-plus"></i> Add New Item</button>
+                        </div>
+                        
+                        <div id="inventoryTableContainer"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Tab -->
+            <div id="orders" class="tab-content">
+                <h1 class="page-title">Orders Management</h1>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="ordersSearch" placeholder="Search orders...">
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-orders-tab="all">All Orders <span class="pills-counter">25</span></button>
+                        <button class="tab-btn" data-orders-tab="pending">Pending <span class="pills-counter">8</span></button>
+                        <button class="tab-btn" data-orders-tab="delivered">Delivered <span class="pills-counter">15</span></button>
+                        <button class="tab-btn" data-orders-tab="cancelled">Cancelled <span class="pills-counter">2</span></button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                            <button class="btn btn-primary" id="createOrderBtn"><i class="fas fa-plus"></i> Create New Order</button>
+                        </div>
+                        
+                        <div id="ordersTableContainer"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Suppliers Tab -->
+            <div id="suppliers" class="tab-content">
+                <h1 class="page-title">Suppliers Management</h1>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="suppliersSearch" placeholder="Search suppliers...">
+                </div>
+                
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                        <button class="btn btn-primary" id="addSupplierBtn"><i class="fas fa-plus"></i> Add New Supplier</button>
+                    </div>
+                    
+                    <div id="suppliersTableContainer"></div>
+                </div>
+            </div>
+            
+            <!-- Patients Tab -->
+            <div id="patients" class="tab-content">
+                <h1 class="page-title">Patients Records</h1>
+                <!-- Patient content will be populated by JavaScript -->
+            </div>
+            
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <h1 class="page-title">Reports & Analytics</h1>
+                <!-- Reports content will be populated by JavaScript -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal-overlay" id="itemModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="itemModalTitle">Add New Item</h3>
+                <button class="modal-close" id="closeItemModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm">
+                    <!-- Form fields will be populated by JavaScript -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelItemModal">Cancel</button>
+                <button class="btn btn-primary" id="saveItemBtn">Save Item</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="orderModalTitle">Create New Order</h3>
+                <button class="modal-close" id="closeOrderModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <!-- Form fields will be populated by JavaScript -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelOrderModal">Cancel</button>
+                <button class="btn btn-primary" id="saveOrderBtn">Place Order</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="supplierModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="supplierModalTitle">Add New Supplier</h3>
+                <button class="modal-close" id="closeSupplierModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="supplierForm">
+                    <!-- Form fields will be populated by JavaScript -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSupplierModal">Cancel</button>
+                <button class="btn btn-primary" id="saveSupplierBtn">Save Supplier</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
